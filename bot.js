@@ -28,16 +28,8 @@ const web3 = new Web3(
         toBlock: "latest",
     });
 
-    const toAddresses = events.map((e) => e.returnValues.to);
-    const baseAddresses = [
-        process.env.TREASURY_WALLET,
-        process.env.DISTRIBUTION_WALLET,
-        process.env.TEAM_WALLET,
-    ];
-    const allAddresses = [...toAddresses, ...baseAddresses].map((a) =>
-        a.toLowerCase(),
-    );
-    const uniqAddresses = [...new Set(allAddresses)];
+    const toAddresses = events.map((e) => e.returnValues.to.toLowerCase());
+    const uniqAddresses = [...new Set(toAddresses)];
 
     const csvWriter = createObjectCsvWriter({
         path: "data.csv",
