@@ -5,22 +5,20 @@ const { createObjectCsvWriter } = require("csv-writer");
 
 dotenv.config();
 
-const CONTRACT_ADDRESS = "0x2b13B338C6b1eA7baaB370bEfde57C2A87F9848e";
-
 const web3 = new Web3(
     `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY_RINKEBY}`,
 );
 
 (async () => {
     const contractAbiRes = await fetch(
-        `https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&&address=${CONTRACT_ADDRESS}&apikey=${process.env.ETHERSCAN_API_KEY}`,
+        `https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&&address=${process.env.CONTRACT_ADDRESS}&apikey=${process.env.ETHERSCAN_API_KEY}`,
     );
 
     const contractAbi = await contractAbiRes.json();
 
     const contract = new web3.eth.Contract(
         JSON.parse(contractAbi.result),
-        CONTRACT_ADDRESS,
+        process.env.CONTRACT_ADDRESS,
     );
 
     const events = await contract.getPastEvents("Transfer", {
@@ -51,5 +49,5 @@ const web3 = new Web3(
         });
     }
 
-    await csvWriter.writeRecords(records); // returns a promise
+    await csvWriter.writeRecords(records);
 })();
