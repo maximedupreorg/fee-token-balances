@@ -29,7 +29,8 @@ const web3 = new Web3(
     });
 
     const toAddresses = events.map((e) => e.returnValues.to.toLowerCase());
-    const uniqAddresses = [...new Set(toAddresses)];
+    const combinedAddresses = [...toAddresses, process.env.TREASURY_WALLET];
+    const uniqAddresses = [...new Set(combinedAddresses)];
 
     const csvWriter = createObjectCsvWriter({
         path: "data.csv",
