@@ -5,13 +5,11 @@ const { createObjectCsvWriter } = require("csv-writer");
 
 dotenv.config();
 
-const web3 = new Web3(
-    `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY_RINKEBY}`,
-);
+const web3 = new Web3(process.env.ALCHEMY_API_KEY_URL);
 
 (async () => {
     const contractAbiRes = await fetch(
-        `https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&&address=${process.env.CONTRACT_ADDRESS}&apikey=${process.env.ETHERSCAN_API_KEY}`,
+        `${process.env.ETHERSCAN_API_ENDPOINT}?module=contract&action=getabi&&address=${process.env.CONTRACT_ADDRESS}&apikey=${process.env.ETHERSCAN_API_KEY}`,
     );
 
     const contractAbi = await contractAbiRes.json();
