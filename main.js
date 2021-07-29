@@ -28,6 +28,7 @@ const web3 = new Web3(process.env.ALCHEMY_API_KEY_URL);
     const combinedAddresses = [
         ...toAddresses,
         process.env.TREASURY_WALLET.toLowerCase(),
+        process.env.CONTRACT_ADDRESS.toLowerCase(),
     ];
     const uniqAddresses = [...new Set(combinedAddresses)];
 
