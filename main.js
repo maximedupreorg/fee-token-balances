@@ -25,7 +25,10 @@ const web3 = new Web3(process.env.ALCHEMY_API_KEY_URL);
     });
 
     const toAddresses = events.map((e) => e.returnValues.to.toLowerCase());
-    const combinedAddresses = [...toAddresses, process.env.TREASURY_WALLET];
+    const combinedAddresses = [
+        ...toAddresses,
+        process.env.TREASURY_WALLET.toLowerCase(),
+    ];
     const uniqAddresses = [...new Set(combinedAddresses)];
 
     const csvWriter = createObjectCsvWriter({
