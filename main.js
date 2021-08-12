@@ -5,6 +5,8 @@ const { createObjectCsvWriter } = require("csv-writer");
 
 dotenv.config();
 
+const FROM_BLOCK = +process.env.FROM_BLOCK;
+const BSC_BLOCK_QUERY_LIMIT = 2000;
 const web3 = new Web3(process.env.ALCHEMY_API_KEY_URL);
 
 (async () => {
@@ -19,12 +21,25 @@ const web3 = new Web3(process.env.ALCHEMY_API_KEY_URL);
         process.env.CONTRACT_ADDRESS,
     );
 
-    const events = await contract.getPastEvents("Transfer", {
-        fromBlock: "earliest",
-        toBlock: "latest",
-    });
+    const currentBlockNumber = await web3.eth.getBlockNumber();
 
-    const toAddresses = events.map((e) => e.returnValues.to.toLowerCase());
+    const blockDifference = currentBlockNumber - FROM_BLOCK;
+    const nbQueries = Math.ceil(blockDifference / BSC_BLOCK_QUERY_LIMIT);
+    const toAddresses = [];
+
+    for (let i = 0; i < nbQueries; i++) {
+        console.log(`${i}/${nbQueries}`);
+
+        const queryFromBlock = FROM_BLOCK + i * BSC_BLOCK_QUERY_LIMIT;
+
+        const events = await contract.getPastEvents("Transfer", {
+            fromBlock: queryFromBlock,
+            toBlock: queryFromBlock + BSC_BLOCK_QUERY_LIMIT,
+        });
+
+        toAddresses.push(...events.map((e) => e.returnValues.to.toLowerCase()));
+    }
+
     const combinedAddresses = [
         ...toAddresses,
         process.env.TREASURY_WALLET.toLowerCase(),
