@@ -38,6 +38,8 @@ const web3 = new Web3(process.env.ALCHEMY_API_KEY_URL);
         });
 
         toAddresses.push(...events.map((e) => e.returnValues.to.toLowerCase()));
+
+        await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 
     const combinedAddresses = [
