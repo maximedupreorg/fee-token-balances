@@ -28,7 +28,7 @@ const web3 = new Web3(process.env.ALCHEMY_API_KEY_URL);
     const toAddresses = [];
 
     for (let i = 0; i < nbQueries; i++) {
-        console.log(`${i}/${nbQueries}`);
+        console.log(`Query ${i + 1}/${nbQueries}`);
 
         const queryFromBlock = FROM_BLOCK + i * BSC_BLOCK_QUERY_LIMIT;
 
@@ -39,7 +39,7 @@ const web3 = new Web3(process.env.ALCHEMY_API_KEY_URL);
 
         toAddresses.push(...events.map((e) => e.returnValues.to.toLowerCase()));
 
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 500));
     }
 
     const combinedAddresses = [
@@ -61,11 +61,15 @@ const web3 = new Web3(process.env.ALCHEMY_API_KEY_URL);
     const records = [];
 
     for (let a of uniqAddresses) {
+        console.log("writing balance for", a);
+
         records.push({
             holderAddress: a,
             balance: (await contract.methods.balanceOf(a).call()) / 10 ** 9,
             pendingBalanceUpdate: "No",
         });
+
+        await new Promise((resolve) => setTimeout(resolve, 500));
     }
 
     await csvWriter.writeRecords(records);
