@@ -1,6 +1,7 @@
 const Web3 = require("web3");
 const fetch = require("node-fetch");
 const dotenv = require("dotenv");
+const fs = require("fs");
 const { createObjectCsvWriter } = require("csv-writer");
 
 dotenv.config();
@@ -75,4 +76,7 @@ const web3 = new Web3(process.env.ALCHEMY_API_KEY_URL);
     }
 
     await csvWriter.writeRecords(records);
+    const file = fs.readFileSync("data.csv");
+
+    fs.writeFileSync("data.csv", file.toString().replace(/"""/g, '"'));
 })();
