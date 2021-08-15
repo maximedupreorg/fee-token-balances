@@ -64,9 +64,11 @@ const web3 = new Web3(process.env.ALCHEMY_API_KEY_URL);
         console.log("writing balance for", a);
 
         records.push({
-            holderAddress: a,
-            balance: (await contract.methods.balanceOf(a).call()) / 10 ** 9,
-            pendingBalanceUpdate: "No",
+            holderAddress: `"${a}"`,
+            balance: `"${
+                (await contract.methods.balanceOf(a).call()) / 10 ** 9
+            }"`,
+            pendingBalanceUpdate: '"No"',
         });
 
         await new Promise((resolve) => setTimeout(resolve, 500));
