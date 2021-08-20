@@ -7,7 +7,7 @@ const { createObjectCsvWriter } = require("csv-writer");
 dotenv.config();
 
 const FROM_BLOCK = +process.env.FROM_BLOCK;
-const BSC_BLOCK_QUERY_LIMIT = 2000;
+const BSC_BLOCK_QUERY_LIMIT = 1000;
 const web3 = new Web3(process.env.ALCHEMY_API_KEY_URL);
 
 (async () => {
